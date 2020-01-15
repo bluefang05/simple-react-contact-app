@@ -1,4 +1,5 @@
 import React, { useState, useGlobal, useDispatch } from "reactn";
+import { Form, Text } from 'informed';
 import "./css/style.css";
 import Row from "../../Component/Row/Row";
 import Modal from 'react-responsive-modal';
@@ -6,13 +7,41 @@ import Modal from 'react-responsive-modal';
 function Home(props) {
 
     const initialize = useDispatch("initialize");
+    const updateLocalStorage = useDispatch("updateLocalStorage");
     const [contacts, setContacts] = useGlobal("contacts");
     const [addContactModalvisibility, setAddContactModalvisibility] = useState(false);
 
     initialize();
 
-    const openAddContactModal = () => {
+    let contactRows = [];
+
+    contacts.forEach( (element, index) => {
+        contactRows.push(
+            <Row
+                key = {"row"+index}
+                index= {index}
+                firstName= {element.firstName}
+                lastName= {element.lastName}
+                date= {element.date}
+                time= {element.time}
+                phone= {element.phone}
+                email= {element.email}
+                ssn={element.ssn}
+            />
+        )
+    });
+
+    const addContact = (info) => {
         let arr = contacts;
+        let newArr = [...arr];
+        newArr.push(info);
+        setContacts(newArr);
+        updateLocalStorage();
+        console.log(info, newArr);
+    }
+
+    const openAddContactModal = () => {
+        
         setAddContactModalvisibility(true);
         console.log(contacts);
     }
@@ -43,7 +72,45 @@ function Home(props) {
                                     </p>
 
                                     <Modal open={addContactModalvisibility} onClose={() => { closeAddContactModal() }} center>
-                                        <h2>Simple centered modal</h2>
+                                        <Form onSubmit={addContact} >
+                                            <fieldset className="uk-fieldset">
+
+                                                <legend className="uk-legend">Add new row</legend>
+
+                                                <div className="uk-margin">
+                                                    <label className="uk-form-label" htmlFor="form-stacked-text">firstName</label>
+                                                    <Text field="firstName" className="uk-input" value={props.firstName} type="text" />
+                                                </div>
+                                                <div className="uk-margin">
+                                                    <label className="uk-form-label" htmlFor="form-stacked-text">lastName</label>
+                                                    <Text field="lastName" className="uk-input" type="text" />
+                                                </div>
+                                                <div className="uk-margin">
+                                                    <label className="uk-form-label" htmlFor="form-stacked-text">date</label>
+                                                    <Text field="date" className="uk-input" type="date" />
+                                                </div>
+                                                <div className="uk-margin">
+                                                    <label className="uk-form-label" htmlFor="form-stacked-text">arrival time</label>
+                                                    <Text field="arrival" className="uk-input" type="time" />
+                                                </div>
+                                                <div className="uk-margin">
+                                                    <label className="uk-form-label" htmlFor="form-stacked-text">phone</label>
+                                                    <Text field="phone" className="uk-input" type="text" />
+                                                </div>
+                                                <div className="uk-margin">
+                                                    <label className="uk-form-label" htmlFor="form-stacked-text">email</label>
+                                                    <Text field="email" className="uk-input" type="text" />
+                                                </div>
+                                                <div className="uk-margin">
+                                                    <label className="uk-form-label" htmlFor="form-stacked-text">SSN</label>
+                                                    <Text field="ssn" className="uk-input" type="text" />
+                                                </div>
+                                                <div className="uk-margin uk-flex uk-flex-center" >
+                                                    <button type="submit" className="uk-button uk-button-primary uk-button-small">Add</button>
+                                                </div>
+
+                                            </fieldset>
+                                        </Form>
                                     </Modal>
                                     <div className="uk-card-body">
                                         <table className="uk-table uk-table-striped">
@@ -51,6 +118,7 @@ function Home(props) {
                                                 <tr>
                                                     <th>FirstName</th>
                                                     <th>LastName</th>
+                                                    <th>Date</th>
                                                     <th>Time</th>
                                                     <th>Phone</th>
                                                     <th>E-mail</th>
@@ -59,16 +127,18 @@ function Home(props) {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <Row
+                                                {contactRows}
+                                                {/* <Row
                                                     index="11"
                                                     firstName="Enmanuel"
                                                     lastName="Domínguez"
-                                                    time="2:00PM"
+                                                    date="2020-01-15 "
+                                                    time="15:40:00"
                                                     phone="809-480-5264"
                                                     email="enmandom@gmail.com"
                                                     ssn="00118772979"
 
-                                                />
+                                                /> */}
                                             </tbody>
                                         </table>
                                     </div>
