@@ -6,26 +6,41 @@ import Modal from 'react-responsive-modal';
 
 function Home(props) {
 
-    const initialize = useDispatch("initialize");
+    // const initialize = useDispatch("initialize");
     const updateLocalStorage = useDispatch("updateLocalStorage");
     const [contacts, setContacts] = useGlobal("contacts");
     const [addContactModalvisibility, setAddContactModalvisibility] = useState(false);
+    let storedContacts =
+        localStorage.getItem("contacts") != null ? JSON.parse(localStorage.getItem("contacts")) : [];
+    //initialize();
+    console.log(contacts, contacts.length);
+    if (contacts.length < 1 ) {
 
-    initialize();
+
+        setContacts(storedContacts);
+    }
+    // if(localStorage.getItem("contacts")){
+    //     storedContacts = 
+    //     console.log(storedContacts);
+
+    //     console.log(contacts);
+    // }
+
+    console.log(contacts);
 
     let contactRows = [];
 
-    contacts.forEach( (element, index) => {
+    contacts.forEach((element, index) => {
         contactRows.push(
             <Row
-                key = {"row"+index}
-                index= {index}
-                firstName= {element.firstName}
-                lastName= {element.lastName}
-                date= {element.date}
-                time= {element.time}
-                phone= {element.phone}
-                email= {element.email}
+                key={"row" + index}
+                index={index}
+                firstName={element.firstName}
+                lastName={element.lastName}
+                date={element.date}
+                time={element.time}
+                phone={element.phone}
+                email={element.email}
                 ssn={element.ssn}
             />
         )
@@ -33,15 +48,16 @@ function Home(props) {
 
     const addContact = (info) => {
         let arr = contacts;
-        let newArr = [...arr];
+        let newArr = Array.from(contacts);
         newArr.push(info);
+        localStorage.setItem('contacts', JSON.stringify(newArr));
         setContacts(newArr);
         updateLocalStorage();
         console.log(info, newArr);
     }
 
     const openAddContactModal = () => {
-        
+
         setAddContactModalvisibility(true);
         console.log(contacts);
     }
