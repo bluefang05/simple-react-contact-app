@@ -1,8 +1,13 @@
-import React from "react";
+import React, {useGlobal, useDispatch} from "reactn";
 import "./css/style.css";
-import swal from "sweetalert";
+import Row from "../../Component/Row/Row";
 
 function Home(props) {
+
+    const initialize = useDispatch("initialize");
+    const [contacts, setContacts] = useGlobal("contacts");
+    initialize();
+
     return (
         <div>
             <div className="content-padder content-background">
@@ -57,35 +62,5 @@ function Home(props) {
     )
 }
 
-function Row(props) {
-    const confirmDelete = () => {
-        swal({
-          title: "Do you want to delete this row?",
-          text: "Everything will be lost",
-          icon: "warning",
-          buttons: ["cancel", "understood"],
-          dangerMode: true
-        }).then(willDelete => {
-          if (willDelete) {
-            //something
-          }
-        });
-      };
 
-    return (
-        <tr>
-            <td>{props.firstName}</td>
-            <td>{props.lastName}</td>
-            <td>{props.time}</td>
-            <td>{props.phone}</td>
-            <td>{props.email}</td>
-            <td>{props.ssn}</td>
-            <td className="uk-flex uk-flex-between">
-            <span className="icon pencil-icon" uk-icon="pencil"></span>
-            <span className="icon info-icon" uk-icon="info"></span>
-            <span onMouseDown={()=>{confirmDelete();}} className="icon trash-icon" uk-icon="trash"></span>
-            </td>
-        </tr>
-    )
-}
 export default Home;
