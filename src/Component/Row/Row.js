@@ -162,7 +162,7 @@ function Row(props) {
             <td>{props.ssn}</td>
             <td className="uk-flex uk-flex-between">
                 <span onMouseDown={() => { openInfoModal(); }} className="icon info-icon" uk-icon="info"></span>                
-                <span onMouseDown={() => { openEditionModal(); console.log(props); }} className="icon pencil-icon" uk-icon="pencil"></span>
+                <span onMouseDown={() => { openEditionModal(); }} className="icon pencil-icon" uk-icon="pencil"></span>
                 <span onMouseDown={() => { confirmDelete(); }} className="icon trash-icon" uk-icon="trash"></span>
             </td>
         </tr>
