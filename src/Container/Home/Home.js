@@ -9,15 +9,17 @@ function Home(props) {
     // const initialize = useDispatch("initialize");
     const updateLocalStorage = useDispatch("updateLocalStorage");
     const [contacts, setContacts] = useGlobal("contacts");
-    const [addContactModalvisibility, setAddContactModalvisibility] = useState(false);
+    const [addRowModalvisibility, setAddContactModalvisibility] = useState(false);
+    const [initialized, setInitialized] = useState(false);
     let storedContacts =
         localStorage.getItem("contacts") != null ? JSON.parse(localStorage.getItem("contacts")) : [];
     //initialize();
-    console.log(contacts, contacts.length);
-    if (contacts.length < 1 ) {
+    console.log(storedContacts);
+    if (! initialized ) {
 
 
         setContacts(storedContacts);
+        setInitialized(true);
     }
     // if(localStorage.getItem("contacts")){
     //     storedContacts = 
@@ -30,30 +32,29 @@ function Home(props) {
 
     let contactRows = [];
 
-    contacts.forEach((element, index) => {
-        contactRows.push(
-            <Row
-                key={"row" + index}
-                index={index}
-                firstName={element.firstName}
-                lastName={element.lastName}
-                date={element.date}
-                time={element.time}
-                phone={element.phone}
-                email={element.email}
-                ssn={element.ssn}
-            />
-        )
-    });
 
-    const addContact = (info) => {
+    const addRow = (info) => {
         let arr = contacts;
         let newArr = Array.from(contacts);
         newArr.push(info);
         localStorage.setItem('contacts', JSON.stringify(newArr));
         setContacts(newArr);
         updateLocalStorage();
-        console.log(info, newArr);
+        closeAddContactModal();
+    }
+
+    const deleteRow = (index) => {
+        let newRows = [...contacts];
+        newRows.splice(index, 1);
+        setContacts(newRows);
+        updateLocalStorage();
+    }
+
+    const editRow = (index, obj) => {
+        let newRows = [...contacts];
+        newRows[index] = obj;
+        setContacts(newRows);
+        updateLocalStorage();
     }
 
     const openAddContactModal = () => {
@@ -65,6 +66,24 @@ function Home(props) {
     const closeAddContactModal = () => {
         setAddContactModalvisibility(false);
     }
+  
+    contacts.forEach((element, index) => {
+        contactRows.push(
+            <Row
+                key={"row" + index}
+                index={index}
+                firstName={element.firstName}
+                lastName={element.lastName}
+                date={element.date}
+                arrival={element.arrival}
+                phone={element.phone}
+                email={element.email}
+                ssn={element.ssn}
+                deleteRow={deleteRow}
+                editRow={editRow}
+            />
+        )
+    });
 
     return (
         <div>
@@ -87,39 +106,39 @@ function Home(props) {
                                         <button onMouseDown={() => { openAddContactModal(); }} className="uk-button uk-button-primary uk-button-small">Add contact</button>
                                     </p>
 
-                                    <Modal open={addContactModalvisibility} onClose={() => { closeAddContactModal() }} center>
-                                        <Form onSubmit={addContact} >
+                                    <Modal open={addRowModalvisibility} onClose={() => { closeAddContactModal() }} center>
+                                        <Form className="uk-height-large uk-overflow-auto"  onSubmit={addRow} >
                                             <fieldset className="uk-fieldset">
 
                                                 <legend className="uk-legend">Add new row</legend>
 
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">firstName</label>
-                                                    <Text field="firstName" className="uk-input" value={props.firstName} type="text" />
+                                                    <Text required = {true} field="firstName" className="uk-input" value={props.firstName} type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">lastName</label>
-                                                    <Text field="lastName" className="uk-input" type="text" />
+                                                    <Text required = {true} field="lastName" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">date</label>
-                                                    <Text field="date" className="uk-input" type="date" />
+                                                    <Text required = {true} field="date" className="uk-input" type="date" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">arrival time</label>
-                                                    <Text field="arrival" className="uk-input" type="time" />
+                                                    <Text required = {true} field="arrival" className="uk-input" type="time" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">phone</label>
-                                                    <Text field="phone" className="uk-input" type="text" />
+                                                    <Text required = {true} field="phone" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">email</label>
-                                                    <Text field="email" className="uk-input" type="text" />
+                                                    <Text required = {true} field="email" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">SSN</label>
-                                                    <Text field="ssn" className="uk-input" type="text" />
+                                                    <Text required = {true} field="ssn" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin uk-flex uk-flex-center" >
                                                     <button type="submit" className="uk-button uk-button-primary uk-button-small">Add</button>
@@ -135,7 +154,7 @@ function Home(props) {
                                                     <th>FirstName</th>
                                                     <th>LastName</th>
                                                     <th>Date</th>
-                                                    <th>Time</th>
+                                                    <th>Arrival</th>
                                                     <th>Phone</th>
                                                     <th>E-mail</th>
                                                     <th>SSN</th>
@@ -144,17 +163,7 @@ function Home(props) {
                                             </thead>
                                             <tbody>
                                                 {contactRows}
-                                                {/* <Row
-                                                    index="11"
-                                                    firstName="Enmanuel"
-                                                    lastName="Domínguez"
-                                                    date="2020-01-15 "
-                                                    time="15:40:00"
-                                                    phone="809-480-5264"
-                                                    email="enmandom@gmail.com"
-                                                    ssn="00118772979"
 
-                                                /> */}
                                             </tbody>
                                         </table>
                                     </div>
