@@ -1,4 +1,4 @@
-import React, { useGlobal, useState } from "reactn";
+import React, { useState } from "reactn";
 import { Form, Text } from 'informed';
 import "./css/style.css";
 import swal from "sweetalert";

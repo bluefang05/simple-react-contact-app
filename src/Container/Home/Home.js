@@ -6,41 +6,32 @@ import Modal from 'react-responsive-modal';
 
 function Home(props) {
 
-    // const initialize = useDispatch("initialize");
+
     const updateLocalStorage = useDispatch("updateLocalStorage");
     const [contacts, setContacts] = useGlobal("contacts");
-    const [addRowModalvisibility, setAddContactModalvisibility] = useState(false);
+    const [addRowModalvisibility, setAddRowModalvisibility] = useState(false);
     const [initialized, setInitialized] = useState(false);
     let storedContacts =
         localStorage.getItem("contacts") != null ? JSON.parse(localStorage.getItem("contacts")) : [];
-    //initialize();
-    console.log(storedContacts);
-    if (! initialized ) {
+
+
+    if (!initialized) {
 
 
         setContacts(storedContacts);
         setInitialized(true);
     }
-    // if(localStorage.getItem("contacts")){
-    //     storedContacts = 
-    //     console.log(storedContacts);
-
-    //     console.log(contacts);
-    // }
-
-    console.log(contacts);
 
     let contactRows = [];
 
 
     const addRow = (info) => {
-        let arr = contacts;
         let newArr = Array.from(contacts);
         newArr.push(info);
         localStorage.setItem('contacts', JSON.stringify(newArr));
         setContacts(newArr);
         updateLocalStorage();
-        closeAddContactModal();
+        closeAddRowModal();
     }
 
     const deleteRow = (index) => {
@@ -57,16 +48,15 @@ function Home(props) {
         updateLocalStorage();
     }
 
-    const openAddContactModal = () => {
+    const openAddRowModal = () => {
 
-        setAddContactModalvisibility(true);
-        console.log(contacts);
+        setAddRowModalvisibility(true);
     }
 
-    const closeAddContactModal = () => {
-        setAddContactModalvisibility(false);
+    const closeAddRowModal = () => {
+        setAddRowModalvisibility(false);
     }
-  
+
     contacts.forEach((element, index) => {
         contactRows.push(
             <Row
@@ -103,42 +93,42 @@ function Home(props) {
                             <div className="uk-first-column">
                                 <div className="uk-card uk-card-default">
                                     <p className="uk-margin">
-                                        <button onMouseDown={() => { openAddContactModal(); }} className="uk-button uk-button-primary uk-button-small">Add contact</button>
+                                        <button onMouseDown={() => { openAddRowModal(); }} className="uk-button uk-button-primary uk-button-small">Add contact</button>
                                     </p>
 
-                                    <Modal open={addRowModalvisibility} onClose={() => { closeAddContactModal() }} center>
-                                        <Form className="uk-height-large uk-overflow-auto"  onSubmit={addRow} >
+                                    <Modal open={addRowModalvisibility} onClose={() => { closeAddRowModal() }} center>
+                                        <Form className="uk-height-large uk-overflow-auto" onSubmit={addRow} >
                                             <fieldset className="uk-fieldset">
 
                                                 <legend className="uk-legend">Add new row</legend>
 
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">firstName</label>
-                                                    <Text required = {true} field="firstName" className="uk-input" value={props.firstName} type="text" />
+                                                    <Text required={true} field="firstName" className="uk-input" value={props.firstName} type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">lastName</label>
-                                                    <Text required = {true} field="lastName" className="uk-input" type="text" />
+                                                    <Text required={true} field="lastName" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">date</label>
-                                                    <Text required = {true} field="date" className="uk-input" type="date" />
+                                                    <Text required={true} field="date" className="uk-input" type="date" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">arrival time</label>
-                                                    <Text required = {true} field="arrival" className="uk-input" type="time" />
+                                                    <Text required={true} field="arrival" className="uk-input" type="time" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">phone</label>
-                                                    <Text required = {true} field="phone" className="uk-input" type="text" />
+                                                    <Text required={true} field="phone" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">email</label>
-                                                    <Text required = {true} field="email" className="uk-input" type="text" />
+                                                    <Text required={true} field="email" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin">
                                                     <label className="uk-form-label" htmlFor="form-stacked-text">SSN</label>
-                                                    <Text required = {true} field="ssn" className="uk-input" type="text" />
+                                                    <Text required={true} field="ssn" className="uk-input" type="text" />
                                                 </div>
                                                 <div className="uk-margin uk-flex uk-flex-center" >
                                                     <button type="submit" className="uk-button uk-button-primary uk-button-small">Add</button>
