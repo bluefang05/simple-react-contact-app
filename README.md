@@ -3,4 +3,4 @@ a) Write, read, delete and modify (CRUD) contacts  b) The system must specify / 
 
 Netlify link :
 
-https://infallible-cray-bb95cd.netlify.com/
+https://localstorage-react-crud.netlify.com/
